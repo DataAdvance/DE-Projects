@@ -8,4 +8,4 @@ The data contains several dimensions of the data, a select few is needed for the
 
 The data is cleaned using pandas 
 
-The Best/Worst Performing Movies are identified 
+The Best/Worst Performing Movies are identified by calculating performance indicators and advanced filtering
