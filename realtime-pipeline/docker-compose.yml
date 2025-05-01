@@ -1,0 +1,47 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres:13
+    container_name: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - realtime_net
+
+  spark:
+    image: bitnami/spark:latest
+    container_name: spark
+    depends_on:
+      - postgres
+    environment:
+      - SPARK_MODE=master
+    volumes:
+      - ./spark:/opt/spark-apps
+      - ./generated_data:/opt/generated_data
+      - ./postgres_connection_details.txt:/opt/spark-apps/postgres_connection_details.txt
+    command: >
+        spark-submit --packages org.postgresql:postgresql:42.2.18 /opt/spark-apps/spark_streaming_to_postgres.py
+      
+    networks:
+      - realtime_net
+
+  datagenerator:
+    build: ./data-generator
+
+    container_name: datagenerator
+    depends_on:
+      - postgres
+    volumes:
+      - ./generated_data:/app/generated_data
+    networks:
+      - realtime_net
+
+networks:
+  realtime_net:
+    driver: bridge
