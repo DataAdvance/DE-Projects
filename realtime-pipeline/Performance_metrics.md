@@ -10,11 +10,11 @@
 ## Metrics
 
 - **Total Events Processed**: ~3,000 events in 10 minutes
-- **Average Ingestion Latency (Spark)**: ~0.3–0.8 seconds per batch
-- **Average Throughput**: ~5–8 batches/minute
+- **Average Ingestion Latency (Spark)**: 0.3–0.8 seconds per batch
+- **Average Throughput**: 5–8 batches/minute
 - **System Resource Usage**:
-  - CPU: ~10–30% during peak
-  - RAM: ~300MB per container (Postgres/Spark)
+  - CPU: 10–30% during peak
+  - RAM: 300MB per container (Postgres/Spark)
 
 ## Observations
 
