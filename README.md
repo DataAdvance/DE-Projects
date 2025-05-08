@@ -25,14 +25,7 @@ heartbeat-monitor/
 
 ##  How to Run the Project
 
-### 1. Clone the Repository
-
-```bash
-git clone <repo_url>
-cd heartbeat-monitor
-```
-
-### 2. Start Docker Services
+### 1. Start Docker Services
 
 ```bash
 docker-compose up -d
@@ -43,13 +36,13 @@ This launches:
 * Kafka and Zookeeper
 * PostgreSQL
 
-### 3. Create the Database Table
+### 2. Create the Database Table
 
 ```bash
 docker exec -i heartbeat-monitor-postgres-1 psql -U postgres -d heartbeat < db/schema.sql
 ```
 
-### 4. Run the Kafka Producer
+### 3. Run the Kafka Producer
 
 ```bash
 python kafka/producer.py
@@ -57,7 +50,7 @@ python kafka/producer.py
 
 This sends real-time heart rate data to the Kafka topic.
 
-### 5. Run the Kafka Consumer
+### 4. Run the Kafka Consumer
 
 ```bash
 python kafka/consumer.py
@@ -65,7 +58,7 @@ python kafka/consumer.py
 
 This reads from Kafka, validates data, and inserts into PostgreSQL.
 
-### 6. Run the Dashboard
+### 5. Run the Dashboard
 
 ```bash
 streamlit run dashboard/app.py
