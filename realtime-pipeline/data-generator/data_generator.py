@@ -23,7 +23,7 @@ def generate_event(event_id):
     }
 
 # Main function that writes batches of events to CSV files
-def write_csv(batch_size=50, delay=10):
+def write_csv(batch_size=50, delay=10): ## could have been dynamic
     event_id = 1
     while True:
         # Create a new filename using the current time (this ensures uniqueness)

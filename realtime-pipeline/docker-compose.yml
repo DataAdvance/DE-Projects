@@ -1,6 +1,6 @@
-version: "3.8"
 
 services:
+  # This pulls the official PostgreSQL image (version 13) from Docker Hub.
   postgres:
     image: postgres:13
     container_name: postgres
@@ -9,6 +9,7 @@ services:
       POSTGRES_PASSWORD: postgres
     ports:
       - "5432:5432"
+    # Mounts your local init.sql file into the container so it runs automatically at startup. This is how your user_events table is created.
     volumes:
       - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
@@ -19,22 +20,26 @@ services:
     container_name: spark
     depends_on:
       - postgres
+      # Tells Docker to wait for PostgreSQL to start before Spark starts (helps with timing issues).
     environment:
       - SPARK_MODE=master
+    # Runs Spark in “master” mode
     volumes:
       - ./spark:/opt/spark-apps
       - ./generated_data:/opt/generated_data
       - ./postgres_connection_details.txt:/opt/spark-apps/postgres_connection_details.txt
     command: >
-        spark-submit --packages org.postgresql:postgresql:42.2.18 /opt/spark-apps/spark_streaming_to_postgres.py
+        tail -f /dev/null
       
     networks:
       - realtime_net
-
+# Instead of pulling an image, it builds a custom image from the Dockerfile inside the data-generator folder.
   datagenerator:
     build: ./data-generator
 
     container_name: datagenerator
+    
+    # Waits until PostgreSQL is up before starting
     depends_on:
       - postgres
     volumes:
