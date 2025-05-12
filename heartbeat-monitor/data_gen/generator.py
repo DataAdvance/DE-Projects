@@ -1,35 +1,42 @@
-# Import the necessary libraries
 import random
 import time
 import json
+import logging
 from datetime import datetime
+
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s | %(levelname)s | %(message)s",
+    handlers=[
+        logging.FileHandler("heartbeat_generator.log"),
+        logging.StreamHandler()
+    ]
+)
+
+logger = logging.getLogger(__name__)
 
 def generate_heartbeat_data():
     """
-    This function continuously generates synthetic heart rate data
+    Continuously generates synthetic heart rate data
     for fake customers and yields each record as a JSON string.
     """
     while True:
-        # Simulate a record
         record = {
-            "customer_id": random.randint(1, 10),                   # Fake customer ID
-            "timestamp": datetime.now().isoformat(),               # Current timestamp
-            "heart_rate": random.randint(55, 100)                  # Random heart rate
+            "customer_id": random.randint(1, 10),
+            "timestamp": datetime.now().isoformat(),
+            "heart_rate": random.randint(55, 100)
         }
 
-        # Convert record to JSON string
         json_record = json.dumps(record)
 
-        # Print for debug purposes
-        print(f"Generated: {json_record}")
+        # Log the generated data
+        logger.info(f"Generated: {json_record}")
 
-        # Yield to Kafka producer (or test usage)
         yield json_record
-
-        # Simulate 1-second interval between heartbeats
         time.sleep(1)
 
-# For quick local testing
+# For testing
 if __name__ == "__main__":
     for data in generate_heartbeat_data():
-        pass  # You can print here or hook this up with a Kafka producer
+        pass
