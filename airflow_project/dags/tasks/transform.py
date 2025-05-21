@@ -68,3 +68,4 @@ def transform_and_compute_kpis():
         raise
     finally:
         if conn: conn.close()
+
