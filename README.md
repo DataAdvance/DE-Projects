@@ -1,78 +1,84 @@
-# Inventory and Order Management System
+# Inventory and Order Management System (SQL Project)
 
-## Project Description
+## 📦 Project Overview
+This project implements a relational database system for managing inventory, orders, and customer data for an e-commerce business. It includes:
+- Table definitions with integrity constraints
+- Stored procedures for placing orders and replenishing stock
+- Triggers for inventory logging
+- Views for business insights and customer analytics
 
-This project involves designing and implementing a database-driven system to manage inventory and orders for an e-commerce company. The system efficiently handles product information, customer data, and order processing, ensuring proper updates to stock levels when orders are placed. It also tracks all inventory changes and streamlines stock replenishment processes. The system provides insights into customer purchase behaviors, monitors stock levels, and ensures product availability for sale.  The solution supports day-to-day operations like placing orders, updating inventory, and summarizing business metrics, such as order summaries and customer spending. 
+---
 
-## Phase 1: Database Design and Schema Implementation
+## 🗂️ Folder Structure
 
-### Tables
+| File Name                  | Purpose                                             |
+|---------------------------|-----------------------------------------------------|
+| `01_create_tables.sql`    | Defines all necessary tables with constraints       |
+| `02_views.sql`            | Provides simplified reporting through SQL views     |
+| `03_stored_procedures.sql`| Handles order placement and stock replenishment     |
+| `04_triggers.sql`         | Automates stock deduction and inventory logging     |
 
-The database schema includes the following tables:
+---
 
-* **Products:**
-    * Attributes: product ID, name, category, price, stock quantity, and reorder level.
-* **Customers:**
-    * Attributes: customer ID, name, email, and phone number. 
-* **Orders:**
-    * Attributes: order ID, customer ID, order date, and total amount. 
-* **Order Details:**
-    * Attributes: order ID, product ID, quantity, and price. 
-* **Inventory Logs:**
-    * Attributes: log ID, product ID, change date, change quantity, and reason. 
+## 🧱 Table Descriptions
 
-### Data Integrity
+- **products**: Product catalog with pricing and stock tracking.
+- **customers**: Customer details.
+- **orders**: Header record for each transaction.
+- **order_details**: Line items for each order.
+- **inventory_logs**: Audit table for all stock changes.
 
-The design enforces data integrity by implementing relationships between tables.  For example, each order is linked to a valid customer, and order details correspond to valid products.
+---
 
-## Phase 2: Order Placement and Inventory Management
+## ⚙️ Stored Procedures
 
-### Order Placement
+- `place_order(p_customer_id, p_product_id, p_quantity, p_unit_price)`  
+  Places a new order for a customer and deducts stock accordingly.
 
-The system processes new orders from customers, ensuring that the correct quantity is deducted from the stock and the total order amount is calculated. It handles multiple products in a single order.  Order details are updated, and stock usage is tracked.
+- `replenish_stock(p_replenish_quantity)`  
+  Automatically adds stock to products below their reorder level and logs the change.
 
-### Inventory Tracking
+---
 
-Inventory changes, such as those due to orders or stock replenishment, are recorded in the `InventoryLogs` table. The log stores information about when the change occurred, which product was affected, and how much the stock changed. The system allows for retrieval of inventory change history for auditing purposes. 
+## 🔁 Triggers
 
-## Phase 3: Monitoring and Reporting
+- `after_order_detail_insert`  
+  Automatically deducts stock and logs the transaction when a new order item is added.
 
-### Business Insights and Summaries
+---
 
-The system displays summaries of orders, including details such as order date, total amount, and the number of items ordered for each customer. It generates reports showing products that are low on stock and need replenishment.  Products with stock levels below their reorder point are flagged for replenishment.
+## 🔍 Views
 
-### Customer Insights
+- `order_summary_view`  
+  Shows total amount and item count per order, per customer.
 
-The system provides insights into customer spending habits, categorizing customers based on their total spending (e.g., Bronze, Silver, Gold tiers) and generating reports showing total spending.  It also supports bulk discounts, applying discounts based on the number of items purchased in large quantities. 
+- `low_stock_view`  
+  Flags products with stock levels below their reorder threshold.
 
-## Phase 4: Stock Replenishment and Automation
+- `customer_tiers_view`  
+  Categorizes customers into Bronze, Silver, or Gold based on total spending.
 
-### Stock Replenishment
+---
 
-The system replenishes stock levels for products that fall below the reorder point. [cite: 61, 62] The inventory log is updated to reflect these changes. 
+## 🚀 Getting Started
 
-### Automation
+1. Run `01_create_tables.sql` to create the schema.
+2. (Optional) Insert sample data.
+3. Run `03_stored_procedures.sql` and `04_triggers.sql` to add logic.
+4. Run `02_views.sql` to create views.
+5. Use `CALL place_order(...)` and `CALL replenish_stock(...)` to test.
 
-The system automates tasks such as updating stock levels after an order, calculating the total amount for an order, and categorizing customers based on their spending habits.  The solution minimizes manual work while ensuring accuracy in inventory tracking and order management. 
+---
 
-## Phase 5: Advanced Queries and Optimizations
+## ✅ Requirements
 
-### Views
+- MySQL 5.7+ (for JSON and view support)
+- SQL client or CLI for script execution
 
-The system uses views to simplify data access:
+---
 
-* A view summarizes order information, showing details such as customer name, order date, total amount, and the number of items in each order. 
-* A view displays stock information, showing which products are low on stock and need to be reordered.
-### Performance Optimization
+## 📌 Notes
 
-The system is optimized for performance to ensure efficiency as the number of customers, orders, and products grows.
-
-## Deliverables
-
-The project deliverables include:
-
-1.  **Database Schema:** SQL scripts used to create tables, along with relationships and constraints.
-2.  **SQL Queries:** SQL queries demonstrating order placement, stock updates, inventory tracking, and customer categorization based on spending. 
-3.  **Views:** SQL scripts for views created to summarize order and product stock information.
-4.  **Replenishment System:** Demonstration of how the system identifies low stock products and replenishes them. 
-5.  **Report Summaries:** Sample queries that retrieve order summaries and stock insights. 
+- All operations are transaction-safe.
+- Inventory changes are logged for audit purposes.
+- Easily extendable to support discounts, refunds, or promotions.
